@@ -49,8 +49,8 @@ $ helm repo update
 
 6. Expose ports for elastic and kibana:
 ```sh
-$ kubectl -n kube-logging port-forward service/quickstart-es-http 9200 &
-$ kubectl -n kube-logging port-forward service/quickstart-kb-http 5601 &
+$ kubectl -n kube-logging port-forward service/quickstart-es-http --address 0.0.0.0 9200 &
+$ kubectl -n kube-logging port-forward service/quickstart-kb-http --address 0.0.0.0 5601 &
 ```
 
 
@@ -60,8 +60,8 @@ $ kubectl -n kube-logging port-forward service/quickstart-kb-http 5601 &
 2. Run installation `$ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --namespace kube-graph`
 3. Expose ports for prometheus and grafana web UI:
 ```sh
-$ kubectl port-forward -n kube-graph prometheus-kube-prometheus-stack-prometheus-0 9090 &
-$ kubectl port-forward -n kube-graph kube-prometheus-stack-grafana-77f995c9c-m48gx 3000 &
+$ kubectl port-forward -n kube-graph prometheus-kube-prometheus-stack-prometheus-0 --address 0.0.0.0 9090 &
+$ kubectl port-forward -n kube-graph kube-prometheus-stack-grafana-77f995c9c-m48gx --address 0.0.0.0 3000 &
 ```
 ## Configuration
 
