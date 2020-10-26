@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: client-machine
+  labels:
+    app: client
+spec:
+  containers:
+    - name: client-01
+      image: centos
+      command: ["/bin/sh"]
