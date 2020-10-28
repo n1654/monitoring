@@ -45,7 +45,7 @@ $ helm repo update
 5.   Filebeat deployment set: `kubectl apply -f ./filebeat-kubernetes.yaml`
         > **NOTE**: checkout password for "elastic" user:
         > `$ kubectl get secret -n kube-logging quickstart-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 --decode`
-        > replace password in the configuration file `filebeat-kubernetes.yaml` line 80
+        > replace password in the configuration file `filebeat-kubernetes.yaml` line 93
 
 6. Expose ports for elastic and kibana:
 ```sh
