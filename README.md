@@ -79,6 +79,9 @@ $ kubectl port-forward -n kube-graph kube-prometheus-stack-grafana-77f995c9c-m48
  - Aggregation: Count
  - Add bucket: Split slices: Aggregation: Terms, Field: kubernetes.pods.name, Size: 10
 
+### Data sets and Dashboard
+https://www.elastic.co/guide/en/kibana/7.2/tutorial-build-dashboard.html
+
 
 ### Grafana
 
