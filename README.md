@@ -27,6 +27,8 @@ The kube-prometheus stack includes a resource metrics API server, so the metrics
 [Install Helm for windows](https://helm.sh/docs/intro/install/#from-chocolatey-windows)
 [Install Helm from source](https://helm.sh/docs/intro/install/#from-source-linux-macos)
 
+https://helm.sh/blog/new-location-stable-incubator-charts/
+
 ```sh
 $ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 $ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
