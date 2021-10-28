@@ -99,7 +99,7 @@ USERNAME: `admin`
 PASSWORD: `prom-operator`
 
 Prometheus configuration file:
-`kubectl exec -it prometheus-kube-prometheus-stack-prometheus-0 -n kube-grafana -- /bin/sh`
+`kubectl exec -it prometheus-kube-prometheus-stack-prometheus-0 -n kube-graph -- /bin/sh`
 
 ### Dashboard
 
