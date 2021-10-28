@@ -66,6 +66,8 @@ $ kubectl -n kube-logging port-forward service/quickstart-kb-http --address 0.0.
 
 1. Create namespace for Prometheus and Grafana `$ kubectl apply -f ./namespace-kube-graph.yaml`
 2. Run installation `$ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --namespace kube-graph`
+	> **NOTE **: You can ignore warnings like this:
+	> `W1028 17:37:10.523912   36088 warnings.go:70] policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+`
 3. Expose ports for prometheus and grafana web UI:
 ```sh
 $ kubectl port-forward -n kube-graph prometheus-kube-prometheus-stack-prometheus-0 --address 0.0.0.0 9090 &
