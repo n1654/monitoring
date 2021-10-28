@@ -69,6 +69,7 @@ kubectl -n kube-logging port-forward service/quickstart-kb-http --address 0.0.0.
 	> **NOTE **: You can ignore warnings like this:
 	> `W1028 17:37:10.523912   36088 warnings.go:70] policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+`
 3. Expose ports for prometheus and grafana web UI:
+	> **NOTE**: Keep in mind that pod's name is unique per installation. To find name for `kube-prometheus-stack-grafana` pod in your cluster run `kubectl get pods -n kube-graph`
 ```sh
 kubectl port-forward -n kube-graph prometheus-kube-prometheus-stack-prometheus-0 --address 0.0.0.0 9090 &
 kubectl port-forward -n kube-graph kube-prometheus-stack-grafana-77f995c9c-m48gx --address 0.0.0.0 3000 &
