@@ -37,7 +37,7 @@ https://helm.sh/blog/new-location-stable-incubator-charts/
 
 ```sh
 $ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-$ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+$ helm repo add stable https://charts.helm.sh/stable
 $ helm repo update
 ```
 
