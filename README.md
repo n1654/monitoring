@@ -19,11 +19,11 @@ This adapter is an Extension API Server and Kubernetes needs to be have this fea
 Prerequisites:
 1. swap disabled
 2. AppArmor/SELinux disabled
-3. kubectl and kubelet are installed and its version is 1.22.2
+3. kubectl and kubelet are installed and its version is 1.21.2
 4. Docker installed
   
 Start minikube with the following parameters:
-`minikube start --kubernetes-version=v1.22.2 --memory=6g --bootstrapper=kubeadm --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=Webhook --extra-config=scheduler.address=0.0.0.0 --extra-config=controller-manager.address=0.0.0.0`
+`minikube start --kubernetes-version=v1.21.2 --memory=6g --bootstrapper=kubeadm --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=Webhook --extra-config=scheduler.address=0.0.0.0 --extra-config=controller-manager.address=0.0.0.0`
 
 The kube-prometheus stack includes a resource metrics API server, so the metrics-server addon is not necessary. Ensure the metrics-server addon is disabled on minikube:
 `$ minikube addons disable metrics-server`
