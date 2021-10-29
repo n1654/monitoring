@@ -16,8 +16,14 @@ Kubelet configuration must contain these flags:
 This stack provides [resource metrics](https://github.com/kubernetes/metrics#resource-metrics-api) by deploying the [Prometheus Adapter](https://github.com/DirectXMan12/k8s-prometheus-adapter/).
 This adapter is an Extension API Server and Kubernetes needs to be have this feature enabled, otherwise the adapter has no effect, but is still deployed.
 
+Prerequisites:
+1. swap disabled
+2. AppArmor/SELinux disabled
+3. kubectl and kubelet are installed and its version is 1.21.2
+4. Docker installed
+  
 Start minikube with the following parameters:
-`minikube start --kubernetes-version=v1.19.2 --memory=6g --bootstrapper=kubeadm --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=Webhook --extra-config=scheduler.address=0.0.0.0 --extra-config=controller-manager.address=0.0.0.0`
+`minikube start --kubernetes-version=v1.21.2 --memory=6g --bootstrapper=kubeadm --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=Webhook --extra-config=scheduler.address=0.0.0.0 --extra-config=controller-manager.address=0.0.0.0`
 
 The kube-prometheus stack includes a resource metrics API server, so the metrics-server addon is not necessary. Ensure the metrics-server addon is disabled on minikube:
 `$ minikube addons disable metrics-server`
@@ -30,9 +36,9 @@ The kube-prometheus stack includes a resource metrics API server, so the metrics
 https://helm.sh/blog/new-location-stable-incubator-charts/
 
 ```sh
-$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-$ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-$ helm repo update
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add stable https://charts.helm.sh/stable
+helm repo update
 ```
 
 ## Deployment
@@ -46,13 +52,13 @@ $ helm repo update
 
 5.   Filebeat deployment set: `kubectl apply -f ./filebeat-kubernetes.yaml`
         > **NOTE**: checkout password for "elastic" user:
-        > `$ kubectl get secret -n kube-logging quickstart-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 --decode`
+        > `kubectl get secret -n kube-logging quickstart-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 --decode`
         > replace password in the configuration file `filebeat-kubernetes.yaml` line 93
 
 6. Expose ports for elastic and kibana:
 ```sh
-$ kubectl -n kube-logging port-forward service/quickstart-es-http --address 0.0.0.0 9200 &
-$ kubectl -n kube-logging port-forward service/quickstart-kb-http --address 0.0.0.0 5601 &
+kubectl -n kube-logging port-forward service/quickstart-es-http --address 0.0.0.0 9200 &
+kubectl -n kube-logging port-forward service/quickstart-kb-http --address 0.0.0.0 5601 &
 ```
 
 
@@ -60,10 +66,13 @@ $ kubectl -n kube-logging port-forward service/quickstart-kb-http --address 0.0.
 
 1. Create namespace for Prometheus and Grafana `$ kubectl apply -f ./namespace-kube-graph.yaml`
 2. Run installation `$ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --namespace kube-graph`
+	> **NOTE **: You can ignore warnings like this:
+	> `W1028 17:37:10.523912   36088 warnings.go:70] policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+`
 3. Expose ports for prometheus and grafana web UI:
+	> **NOTE**: Keep in mind that pod's name is unique per installation. To find name for `kube-prometheus-stack-grafana` pod in your cluster run `kubectl get pods -n kube-graph`
 ```sh
-$ kubectl port-forward -n kube-graph prometheus-kube-prometheus-stack-prometheus-0 --address 0.0.0.0 9090 &
-$ kubectl port-forward -n kube-graph kube-prometheus-stack-grafana-77f995c9c-m48gx --address 0.0.0.0 3000 &
+kubectl port-forward -n kube-graph prometheus-kube-prometheus-stack-prometheus-0 --address 0.0.0.0 9090 &
+kubectl port-forward -n kube-graph kube-prometheus-stack-grafana-77f995c9c-m48gx --address 0.0.0.0 3000 &
 ```
 ## Configuration
 
@@ -90,7 +99,7 @@ USERNAME: `admin`
 PASSWORD: `prom-operator`
 
 Prometheus configuration file:
-`$ kubectl exec -it prometheus-kube-prometheus-stack-prometheus-0 -n kube-grafana -- /bin/sh`
+`kubectl exec -it prometheus-kube-prometheus-stack-prometheus-0 -n kube-graph -- /bin/sh`
 
 ### Dashboard
 
@@ -119,9 +128,9 @@ Prometheus configuration file:
 
 ### Minikibe tuning
 
-`$ minikube delete && minikube start --kubernetes-version=v1.19.2 --memory=6g --bootstrapper=kubeadm --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=Webhook --extra-config=scheduler.address=0.0.0.0 --extra-config=controller-manager.address=0.0.0.0`
+`minikube delete && minikube start --kubernetes-version=v1.21.2 --memory=6g --bootstrapper=kubeadm --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=Webhook --extra-config=scheduler.address=0.0.0.0 --extra-config=controller-manager.address=0.0.0.0`
 
-`$ minikube addons disable metrics-server`
+`minikube addons disable metrics-server`
 
 ### Filebeat settings for linux container
 
@@ -133,7 +142,7 @@ Prometheus configuration file:
 
 Install filebeat
 ```sh
-$ sudo rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
+sudo rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
 ```
 
 Create repository file /etc/yum.repos.d/elastic.repo:
